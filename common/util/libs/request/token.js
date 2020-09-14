@@ -1,7 +1,3 @@
-const AccessKey = "access"
-const AccessTimeKey = "access_time"
-const RefreshKey = "refresh"
-const RefreshTimeKey = "refresh_time"
 const TokenInfo = "tokenInfo"
 const Address = "address"
 const UserMsg = "userMsg"
@@ -29,73 +25,6 @@ export function isRefreshExpired(myUserInfo) {
 		return false
 	}
 	return true
-}
-
-
-export function retrieveTokenInfo() {
-	const app = getApp({
-		allowDefault: true
-	})
-	try {
-		const _access = uni.getStorageSync(AccessKey)
-		if (_access) {
-			app.globalData.access = _access
-		}
-		const _accessTime = uni.getStorageSync(AccessTimeKey)
-		if (_accessTime) {
-			app.globalData.accessTime = _accessTime * 1
-		}
-		const _refresh = uni.getStorageSync(RefreshKey)
-		if (_refresh) {
-			app.globalData.refresh = _refresh
-		}
-		const _refreshTime = uni.getStorageSync(RefreshTimeKey)
-		if (_refreshTime) {
-			app.globalData.refreshTime = _refreshTime * 1
-		}
-	} catch (e) {
-		// TODO: error
-	}
-}
-
-export function updateAccess(access) {
-	const app = getApp({
-		allowDefault: true
-	})
-	if (access) {
-		const time = Date.now()
-		app.globalData.access = access
-		app.globalData.accessTime = time
-		uni.setStorage({
-			key: AccessKey,
-			data: access,
-			fail: (e) => {
-				// TODO
-			}
-		})
-		uni.setStorage({
-			key: AccessTimeKey,
-			data: time,
-			fail: (e) => {
-				// TODO
-			}
-		})
-	} else {
-		app.globalData.access = null
-		app.globalData.accessTime = null
-		uni.removeStorage({
-			key: AccessKey,
-			fail: (e) => {
-				// TODO
-			}
-		})
-		uni.removeStorage({
-			key: AccessTimeKey,
-			fail: (e) => {
-				// TODO
-			}
-		})
-	}
 }
 
 // 存储tokkin信息
@@ -157,4 +86,10 @@ export function removeUserMsg(){
 		}
 	})
 }
+
+export function Delete(opt) {
+	delete opt.header.jwt_token
+	delete opt.header.sub
+}
+
 

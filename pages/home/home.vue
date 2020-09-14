@@ -3,10 +3,24 @@
 		<l-button type="primary" style="margin: 20rpx 0;" @click="login">登录</l-button>
 		<l-button type="error" style="margin: 20rpx 0;" @click="shopList">shopList</l-button>
 		<l-button type="warning" style="margin: 20rpx 0;" @click="getInfo">getInfo</l-button>
+		<l-form :model="form" ref="lForm" :border-bottom='false' :error-type="errorType">
+			<l-form-item :leftIconStyle="{color: '#888', fontSize: '32rpx'}" left-icon="account" label-width="120" label="姓名"
+			 prop="name">
+				<l-input v-model="form.name" />
+			</l-form-item>
+			<l-form-item required label="简介" prop="intro">
+				<l-input v-model="form.intro" />
+			</l-form-item>
+			<l-form-item label="电话" prop="phone">
+				<l-input v-model="form.phone" />
+			</l-form-item>
+		</l-form>
+		<l-button style="margin-top: 20rpx;" @click="submit">提交</l-button>
 	</view>
 </template>
 
 <script>
+	import md5Libs from "../../common/util/libs/function/md5.js";
 	import {
 		login,
 		getTrendList,
@@ -21,24 +35,66 @@
 			return {
 				par: {
 					username: '269687489@qq.com',
-					password: '2d524e2f870e5240b08b3b85b164f680',
+					password: '123456',
 					type: 3
 				},
 				list: {
 					limit: 10,
 					page: 1
-				}
+				},
+				form: {
+					name: '',
+					intro: '',
+					phone: ''
+				},
+				rules: {
+					name: [{
+						required: true,
+						message: '请输入名字',
+						trigger: ['change', 'blur']
+					}],
+					intro: [{
+						min: 5,
+						message: '简介不能少于5个字',
+						trigger: 'change'
+					}],
+					phone: [{
+						required: true,
+						message: '请输入手机号',
+						trigger: ['change', 'blur']
+					}, {
+						validator: (rule, value, callback) => {
+							return this.$Lau.test.mobile(value)
+						},
+						message: '手机号码不正确',
+						trigger: ['blur']
+					}]
+				},
+				errorType: ['toast'],
 			}
 		},
 		methods: {
 			...mapMutations({
 				SET_TOKENINFO: 'user/SET_TOKENINFO'
 			}),
+			submit() {
+				this.$refs.lForm.validate(valid => {
+					if (valid) {
+						console.log('验证通过');
+					} else {
+						console.log('验证失败');
+					}
+				});
+			},
+
+
 			login() {
+				var loginForm = JSON.parse(JSON.stringify(this.par))
+				this.par.password = md5Libs.md5(encodeURIComponent(JSON.stringify(loginForm.password)));
+
 				this.$store.dispatch('user/login', this.par)
 					.then((res) => {
-						console.log('login', res)
-						this.SET_TOKENINFO(res.data)
+
 					})
 					.catch((err) => {
 						uni.showToast({
@@ -48,27 +104,26 @@
 					})
 			},
 			shopList() {
-				this.$Lau.post('/customer/home/selectTrendList', {
-					limit: 10,
-					page: 1
-				},{authType:'None'}).then(res => {
-					console.log(res);
-				});
-			},
-			
-			getInfo() {
-				this.$Lau.get('/customer/user/selectUserInfo').then(res => {
-					console.log(res);
-				});
-				// getInfo().then(res=>{
-				// 	console.log('getInfo',res)
-				// }).catch(err=>{
-				// 	console.log(err)
+				// uni.navigateTo({
+				// 	url:'/pages/homeSon/homeSon?data=1'
 				// })
+				this.$Lau.route('pages/homeSon/homeSon',{
+					age:'22'
+				})
+			
+			},
+
+			getInfo() {
+				getInfo().then(res => {
+					console.log('getInfo', res)
+				}).catch(err => {})
 			}
 		},
 		onLoad() {
 
+		},
+		onReady() {
+			this.$refs.lForm.setRules(this.rules)
 		}
 	}
 </script>

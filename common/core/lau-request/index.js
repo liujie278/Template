@@ -1,16 +1,19 @@
-import {requestConfig} from './common.js'
-
+import { requestConfig } from './common.js'
+import { toast } from '../../util/util.js'
 // attention: the success/fail/complete handler here for global or custom config in request is just for uni.request's success/fail/complete.
 // it's not meaning the status of 200-300. status 400 from server is also success in uni.request
 export default class Request {
-	constructor(config={}, reqInterceptor=null, resInterceptor=null, successHandler=null, failHandler=null, completeHandler=null) {
+	constructor(config = {}, reqInterceptor = null, resInterceptor = null, successHandler = null, failHandler = null,
+		completeHandler = null) {
 		// base
-	    this.baseUrl = config.baseUrl
+		this.baseUrl = config.baseUrl
 		if (config.header) {
 			// we must parse deep-copy header, then it can not be influenced by the-before request
 			this.header = Object.assign({}, config.header) // JSON.parse(JSON.stringify(config.header))
 		} else {
-			this.header = {"Content-Type": "application/json;charset=UTF-8"}
+			this.header = {
+				"Content-Type": "application/json;charset=UTF-8"
+			}
 		}
 		// this.header = config.header || {"Content-Type": "application/json;charset=UTF-8"},
 		// global callback for success/fail/complete. They are also response interceptors.
@@ -23,7 +26,10 @@ export default class Request {
 		if (config.cancelReject && (typeof config.cancelReject === 'object')) {
 			this.cancelReject = Object.assign({}, config.cancelReject)
 		} else {
-			this.cancelReject = {text: '请求未通过验证,检查是否登录或者数据正确', type: 'warning'}
+			this.cancelReject = {
+				text: '请求未通过验证,检查是否登录或者数据正确',
+				type: 'warning'
+			}
 		}
 		if (config.failReject && (typeof config.failReject === 'object')) {
 			this.failReject = Object.assign({}, config.failReject)
@@ -34,34 +40,37 @@ export default class Request {
 	}
 	// type: request/upload/download.
 	// the success/fail/complete handler will not override the global, it will just call after global
-	async request(options, successHandler=null, failHandler=null, completeHandler=null) {
+	async request(options, successHandler = null, failHandler = null, completeHandler = null) {
 		const task = options.task || false
 		const type = options.type || "request"
 		// delete options.task
 		let config = null
-		try{
+		try {
 			// 执行请求拦截器,重新构造请求数据/参数(不包括响应拦截器/处理器)
 			config = await requestConfig(this, options)
-		}catch(e){
+		} catch (e) {
 			// we reject the error info
 			return Promise.reject(e)
 		}
 		// u could return false
 		if (!config || typeof config != 'object') {
 			// if we just return, not with Promise.reject, it will be resolved, and the param is null
+			toast(this.cancelReject.text)
 			return Promise.reject(this.cancelReject)
 		}
 		// u could return a mypReqToCancel with cancelReject
 		if (config.mypReqToCancel) {
 			if (config.cancelReject && (typeof config.cancelReject === 'object')) {
+				toast(config.cancelReject.text)
 				return Promise.reject(config.cancelReject)
 			}
+			toast(this.cancelReject.text)
 			return Promise.reject(this.cancelReject)
+			
 		}
 		if (config.cancelReject) {
 			delete config.cancelReject
 		}
-		// console.log(config)
 		const that = this
 		if (task) {
 			config["success"] = (response) => {
@@ -88,7 +97,7 @@ export default class Request {
 			}
 			return
 		}
-		return new Promise((resolve, reject)=>{
+		return new Promise((resolve, reject) => {
 			config["success"] = (response) => {
 				let _res = null
 				if (that.responseInterceptor) {

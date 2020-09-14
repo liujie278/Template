@@ -5,7 +5,11 @@
 	}, {
 		"path": "pages/my/my",
 		"style": {}
-	}],
+	}    ,{
+            "path" : "pages/homeSon/homeSon",
+            "style" : {}
+        }
+    ],
 	
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

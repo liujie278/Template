@@ -3,7 +3,7 @@ import {
 } from '@/api/api.js'
 import {
 	updateTokenInfo,updateAddress,updateUserMsg
-} from '../../common/Core/token.js'
+} from '../../common/util/libs/request/token.js'
 
 const state = {
 	hasLogin: false,
@@ -31,8 +31,8 @@ const actions = {
 				password: password,
 				type: type
 			}).then(response => {
-				// const {data} = response
-				// commit('SET_USERINFO', data) //用户信息。
+				const {data} = response
+				commit('SET_TOKENINFO', data) //用户信息。
 				resolve(response)
 			}).catch(error => {
 				reject(error)

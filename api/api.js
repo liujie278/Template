@@ -1,4 +1,4 @@
-import request from '../common/Core/myRequest.js'
+import request from '../common/core/_request.js'
 /* 登录 */
 export function login(data) {
 	return request.request({
@@ -17,7 +17,6 @@ export function getInfo() {
 		},
         url: '/customer/user/selectUserInfo',
         method: 'GET',
-		loading:'None'
     })
 }
 
