@@ -1,3 +1,7 @@
+/**
+ * 弹出层提示信息
+ */
+
 // 5+ 显示加载框
 function showWaiting() {
 	plus.nativeUI.showWaiting('');

@@ -71,8 +71,6 @@ export default {
 			type: Boolean,
 			default: true
 		},
-		// 抽屉的宽度(mode=left|right)，或者高度(mode=top|bottom)，单位rpx，或者"auto"
-		// 或者百分比"50%"，表示由内容撑开高度或者宽度
 		length: {
 			type: [Number, String],
 			default: 'auto'
@@ -82,7 +80,6 @@ export default {
 			type: Boolean,
 			default: true
 		},
-		// 是否开启底部安全区适配，开启的话，会在iPhoneX机型底部添加一定的内边距
 		safeAreaInsetBottom: {
 			type: Boolean,
 			default: false
@@ -127,7 +124,6 @@ export default {
 			type: String,
 			default: 'close'
 		},
-		// 自定义关闭图标位置，top-left为左上角，top-right为右上角，bottom-left为左下角，bottom-right为右下角
 		closeIconPos: {
 			type: String,
 			default: 'top-right'
@@ -137,29 +133,23 @@ export default {
 			type: String,
 			default: '#909399'
 		},
-		// 关闭图标的大小，单位rpx
+		// 关闭图标的大小
 		closeIconSize: {
 			type: [String, Number],
 			default: '30'
 		},
-		// 宽度，只对左，右，中部弹出时起作用，单位rpx，或者"auto"
-		// 或者百分比"50%"，表示由内容撑开高度或者宽度，优先级高于length参数
 		width: {
 			type: String,
 			default: ''
 		},
-		// 高度，只对上，下，中部弹出时起作用，单位rpx，或者"auto"
-		// 或者百分比"50%"，表示由内容撑开高度或者宽度，优先级高于length参数
 		height: {
 			type: String,
 			default: ''
 		},
-		// 给一个负的margin-top，往上偏移，避免和键盘重合的情况，仅在mode=center时有效
 		negativeTop: {
 			type: [String, Number],
 			default: 0
 		},
-		// 遮罩的样式，一般用于修改遮罩的透明度
 		maskCustomStyle: {
 			type: Object,
 			default() {
@@ -172,11 +162,10 @@ export default {
 			visibleSync: false,
 			showDrawer: false,
 			timer: null,
-			closeFromInner: false, // value的值改变，是发生在内部还是外部
+			closeFromInner: false, 
 		};
 	},
 	computed: {
-		// 根据mode的位置，设定其弹窗的宽度(mode = left|right)，或者高度(mode = top|bottom)
 		style() {
 			let style = {};
 			// 如果是左边或者上边弹出时，需要给translate设置为负值，用于隐藏
@@ -194,7 +183,6 @@ export default {
 				};
 			}
 			style.zIndex = this.uZindex;
-			// 如果用户设置了borderRadius值，添加弹窗的圆角
 			if (this.borderRadius) {
 				switch (this.mode) {
 					case 'left':
@@ -211,7 +199,6 @@ export default {
 						break;
 					default:
 				}
-				// 不加可能圆角无效
 				style.overflow = 'hidden';
 			}
 			return style;
@@ -220,18 +207,17 @@ export default {
 		centerStyle() {
 			let style = {};
 			style.width = this.width ? this.getUnitValue(this.width) : this.getUnitValue(this.length);
-			// 中部弹出的模式，如果没有设置高度，就用auto值，由内容撑开高度
+			
 			style.height = this.height ? this.getUnitValue(this.height) : 'auto';
 			style.zIndex = this.uZindex;
 			style.marginTop = `-${this.$Lau.addUnit(this.negativeTop)}`;
 			if (this.borderRadius) {
 				style.borderRadius = `${this.borderRadius}rpx`;
-				// 不加可能圆角无效
+				
 				style.overflow = 'hidden';
 			}
 			return style;
 		},
-		// 计算整理后的z-index值
 		uZindex() {
 			return this.zIndex ? this.zIndex : this.$Lau.zIndex.popup;
 		}
@@ -247,27 +233,20 @@ export default {
 		}
 	},
 	mounted() {
-		// 组件渲染完成时，检查value是否为true，如果是，弹出popup
 		this.value && this.open();
 	},
     methods: {
-		// 判断传入的值，是否带有单位，如果没有，就默认用rpx单位
 		getUnitValue(val) {
 			if(/(%|px|rpx|auto)$/.test(val)) return val;
 			else return val + 'rpx'
 		},
-		// 遮罩被点击
 		maskClick() {
 			this.close();
 		},
 		close() {
-			// 标记关闭是内部发生的，否则修改了value值，导致watch中对value检测，导致再执行一遍close
-			// 造成@close事件触发两次
 			this.closeFromInner = true;
 			this.change('showDrawer', 'visibleSync', false);
 		},
-		// 中部弹出时，需要.l-drawer-content将居中内容，此元素会铺满屏幕，点击需要关闭弹窗
-		// 让其只在mode=center时起作用
 		modeCenterClose(mode) {
 			if (mode != 'center' || !this.maskCloseAble) return;
 			this.close();
@@ -275,10 +254,7 @@ export default {
 		open() {
 			this.change('visibleSync', 'showDrawer', true);
 		},
-		// 此处的原理是，关闭时先通过动画隐藏弹窗和遮罩，再移除整个组件
-		// 打开时，先渲染组件，延时一定时间再让遮罩和弹窗的动画起作用
 		change(param1, param2, status) {
-			// 如果this.popup为false，意味着为picker，actionsheet等组件调用了popup组件
 			if (this.popup == true) {
 				this.$emit('input', status);
 			}

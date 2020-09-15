@@ -15,28 +15,24 @@ function queryParams(data = {}, isPrefix = true, arrayFormat = 'brackets') {
 		}
 		// 如果值为数组，另行处理
 		if (value.constructor === Array) {
-			// e.g. {ids: [1, 2, 3]}
+			
 			switch (arrayFormat) {
 				case 'indices':
-					// 结果: ids[0]=1&ids[1]=2&ids[2]=3
 					for (let i = 0; i < value.length; i++) {
 						_result.push(key + '[' + i + ']=' + value[i])
 					}
 					break;
 				case 'brackets':
-					// 结果: ids[]=1&ids[]=2&ids[]=3
 					value.forEach(_value => {
 						_result.push(key + '[]=' + _value)
 					})
 					break;
 				case 'repeat':
-					// 结果: ids=1&ids=2&ids=3
 					value.forEach(_value => {
 						_result.push(key + '=' + _value)
 					})
 					break;
 				case 'comma':
-					// 结果: ids=1,2,3
 					let commaStr = "";
 					value.forEach(_value => {
 						commaStr += (commaStr ? "," : "") + _value;

@@ -49,31 +49,10 @@
 </template>
 
 <script>
-	/**
-	 * swiper 轮播图
-	 * @description 该组件一般用于导航轮播，广告展示等场景,可开箱即用
-	 * @tutorial https://www.uviewui.com/components/swiper.html
-	 * @property {Array} list 轮播图数据，见官网"基本使用"说明
-	 * @property {Boolean} title 是否显示标题文字，需要配合list参数，见官网说明（默认false）
-	 * @property {String} mode 指示器模式，见官网说明（默认round）
-	 * @property {String Number} height 轮播图组件高度，单位rpx（默认250）
-	 * @property {String} indicator-pos 指示器的位置（默认bottomCenter）
-	 * @property {Boolean} effect3d 是否开启3D效果（默认false）
-	 * @property {Boolean} autoplay 是否自动播放（默认true）
-	 * @property {String Number} interval 自动轮播时间间隔，单位ms（默认2500）
-	 * @property {Boolean} circular 是否衔接播放，见官网说明（默认true）
-	 * @property {String} bg-color 背景颜色（默认#f3f4f6）
-	 * @property {String Number} border-radius 轮播图圆角值，单位rpx（默认8）
-	 * @property {Object} title-style 自定义标题样式
-	 * @property {String Number} effect3d-previous-margin mode = true模式的情况下，激活项与前后项之间的距离，单位rpx（默认50）
-	 * @property {String} img-mode 图片的裁剪模式，详见image组件裁剪模式（默认aspectFill）
-	 * @event {Function} click 点击轮播图时触发
-	 * @example <l-swiper :list="list" mode="dot" indicator-pos="bottomRight"></l-swiper>
-	 */
+	
 	export default {
 		name: "l-swiper",
 		props: {
-			// 轮播图的数据,格式如：[{image: 'xxxx', title: 'xxxx'}，{image: 'yyyy', title: 'yyyy'}]，其中title字段可选
 			list: {
 				type: Array,
 				default () {
@@ -102,7 +81,6 @@
 				type: [String, Number],
 				default: 3000
 			},
-			// 指示器的模式，rect|dot|number|round
 			mode: {
 				type: String,
 				default: 'round'
@@ -112,7 +90,6 @@
 				type: [Number, String],
 				default: 250
 			},
-			// 指示器的位置，topLeft|topCenter|topRight|bottomLeft|bottomCenter|bottomRight
 			indicatorPos: {
 				type: String,
 				default: 'bottomCenter'
@@ -122,7 +99,6 @@
 				type: Boolean,
 				default: false
 			},
-			// 3D模式的情况下，激活item与前后item之间的距离，单位rpx
 			effect3dPreviousMargin: {
 				type: [Number, String],
 				default: 50
@@ -132,12 +108,10 @@
 				type: Boolean,
 				default: true
 			},
-			// 自动轮播时间间隔，单位ms
 			duration: {
 				type: [Number, String],
 				default: 500
 			},
-			// 是否衔接滑动，即到最后一张时接着滑动，是否自动切换到第一张
 			circular: {
 				type: Boolean,
 				default: true
@@ -147,7 +121,6 @@
 				type: String,
 				default: 'aspectFill'
 			},
-			// 从list数组中读取的图片的属性名
 			name: {
 				type: String,
 				default: 'image'
@@ -171,19 +144,16 @@
 			}
 		},
 		watch: {
-			// 如果外部的list发生变化，判断长度是否被修改，如果前后长度不一致，重置uCurrent值，避免溢出
 			list(nVal, oVal) {
 				if(nVal.length !== oVal.length) this.uCurrent = 0;
 			},
-			// 监听外部current的变化，实时修改内部依赖于此测uCurrent值，如果更新了current，而不是更新uCurrent，
-			// 就会错乱，因为指示器是依赖于uCurrent的
 			current(n) {
 				this.uCurrent = n;
 			}
 		},
 		data() {
 			return {
-				uCurrent: this.current // 当前活跃的swiper-item的index
+				uCurrent: this.current 
 			};
 		},
 		computed: {
@@ -204,7 +174,6 @@
 				}
 				return tmp;
 			},
-			// 因为uni的swiper组件的current参数只接受Number类型，这里做一个转换
 			elCurrent() {
 				return Number(this.current);
 			}
@@ -216,14 +185,10 @@
 			change(e) {
 				let current = e.detail.current;
 				this.uCurrent = current;
-				// 发出change事件，表示当前自动切换的index，从0开始
 				this.$emit('change', current);
 			},
-			// 头条小程序不支持animationfinish事件，改由change事件
-			// 暂不监听此事件，因为不再给swiper绑定uCurrent属性
 			animationfinish(e) {
 				// #ifndef MP-TOUTIAO
-				// this.uCurrent = e.detail.current;
 				// #endif
 			}
 		}

@@ -2,9 +2,6 @@ import timeFormat from '../../libs/function/timeFormat.js';
 
 /**
  * 时间戳转为多久之前
- * @param String timestamp 时间戳
- * @param String | Boolean format 如果为时间格式字符串，超出一定时间范围，返回固定的时间格式；
- * 如果为布尔值false，无论什么时间，都返回多久以前的格式
  */
 function timeFrom(timestamp = null, format = 'yyyy-mm-dd') {
 	if (timestamp == null) timestamp = Number(new Date());

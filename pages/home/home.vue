@@ -16,6 +16,7 @@
 			</l-form-item>
 		</l-form>
 		<l-button style="margin-top: 20rpx;" @click="submit">提交</l-button>
+		<view class="">你好</view>
 	</view>
 </template>
 
@@ -104,13 +105,17 @@
 					})
 			},
 			shopList() {
-				// uni.navigateTo({
-				// 	url:'/pages/homeSon/homeSon?data=1'
+				let arr = 1
+				const actions = new Map([
+					[1,['one']],
+					['2',['two']]
+				])
+				let action = actions.get('1')
+					console.log(action)
+				// this.$Lau.route('pages/homeSon/homeSon',{
+				// 	age:'22'
 				// })
-				this.$Lau.route('pages/homeSon/homeSon',{
-					age:'22'
-				})
-			
+
 			},
 
 			getInfo() {

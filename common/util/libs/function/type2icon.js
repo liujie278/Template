@@ -7,7 +7,6 @@ function type2icon(type = 'success', fill = false) {
 	// 如果非预置值,默认为success
 	if (['primary', 'info', 'error', 'warning', 'success'].indexOf(type) == -1) type = 'success';
 	let iconName = '';
-	// 目前(2019-12-12),info和primary使用同一个图标
 	switch (type) {
 		case 'primary':
 			iconName = 'info-circle';

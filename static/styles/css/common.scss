@@ -7,7 +7,7 @@
 .l-abso {
 	position: absolute;
 }
-// nvue不能用标签命名样式，不能放在微信组件中，否则微信开发工具会报警告，无法使用标签名当做选择器
+// nvue不能用标签命名样式
 /* #ifndef APP-NVUE */
 image {
 	display: inline-block;
@@ -112,14 +112,12 @@ text {
 	}
 }
 
-// 定义字体(px)单位，小于20都为px单位字体
 @for $i from 9 to 20 {
 	.l-font-#{$i} {
 		font-size: $i + px;
 	}
 }
 
-// 定义字体(rpx)单位，大于或等于20的都为rpx单位字体
 @for $i from 20 through 40 {
 	.l-font-#{$i} {
 		font-size: $i + rpx;
@@ -128,42 +126,33 @@ text {
 
 // 定义内外边距，历遍1-80
 @for $i from 0 through 80 {
-	// 只要双数和能被5除尽的数
 	@if $i % 2 == 0 or $i % 5 == 0 {
-		// 得出：l-margin-30或者l-m-30
 		.l-margin-#{$i}, .l-m-#{$i} {
 			margin: $i + rpx!important;
 		}
 		
-		// 得出：l-padding-30或者l-p-30
 		.l-padding-#{$i}, .l-p-#{$i} {
 			padding: $i + rpx!important;
 		}
 		
 		@each $short, $long in l left, t top, r right, b bottom, lr, bt {
-			// 缩写版，结果如： l-m-l-30
-			// 定义外边距
+			
 			.l-m-#{$short}-#{$i} {
 				margin-#{$long}: $i + rpx!important;
 			}
 			
-			// 定义内边距
 			.l-p-#{$short}-#{$i} {
 				padding-#{$long}: $i + rpx!important;
 			}
 			
-			// 完整版，结果如：l-margin-left-30
-			// 定义外边距
 			.l-margin-#{$long}-#{$i} {
 				margin-#{$long}: $i + rpx!important;
 			}
 			
-			// 定义内边距
 			.l-padding-#{$long}-#{$i} {
 				padding-#{$long}: $i + rpx!important;
 			}
 			
-			//定义左右编剧
 			@if $short == lr {
 				.l-m-#{$short}-#{$i} {
 					margin:0 $i + rpx!important;
@@ -177,7 +166,6 @@ text {
 					margin:0 $i + rpx!important;
 				}
 				
-				// 定义内边距
 				.l-padding-#{$long}-#{$i} {
 					padding:0 $i + rpx!important;
 				}

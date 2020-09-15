@@ -92,7 +92,6 @@
 				type: Boolean,
 				default: true
 			},
-			// date-单个日期选择，range-开始日期+结束日期选择
 			mode: {
 				type: String,
 				default: 'date'
@@ -107,16 +106,10 @@
 				type: [Number, String],
 				default: 1950
 			},
-			// 最小可选日期(不在范围内日期禁用不可选)
 			minDate: {
 				type: [Number, String],
 				default: '1950-01-01'
 			},
-			/**
-			 * 最大可选日期
-			 * 默认最大值为今天，之后的日期不可选
-			 * 2030-12-31
-			 * */
 			maxDate: {
 				type: [Number, String],
 				default: ''
@@ -230,7 +223,6 @@
 				return `${this.mode}-${this.minDate}-${this.maxDate}`;
 			},
 			uZIndex() {
-				// 如果用户有传递z-index值，优先使用
 				return this.zIndex ? this.zIndex : this.$Lau.zIndex.popup;
 			}
 		},

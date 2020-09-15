@@ -96,53 +96,40 @@ export default {
 			type: String,
 			default: ''
 		},
-		// 用于 <form> 组件，点击分别会触发 <form> 组件的 submit/reset 事件
-		// 取值为submit（提交表单），reset（重置表单）
+		
 		formType: {
 			type: String,
 			default: ''
 		},
-		// 打开 APP 时，向 APP 传递的参数，open-type=launchApp时有效
-		// 只微信小程序、QQ小程序有效
+		
 		appParameter: {
 			type: String,
 			default: ''
 		},
-		// 指定是否阻止本节点的祖先节点出现点击态，微信小程序有效
 		hoverStopPropagation: {
 			type: Boolean,
 			default: false
 		},
-		// 指定返回用户信息的语言，zh_CN 简体中文，zh_TW 繁体中文，en 英文。只微信小程序有效
 		lang: {
 			type: String,
 			default: 'en'
 		},
-		// 会话来源，open-type="contact"时有效。只微信小程序有效
 		sessionFrom: {
 			type: String,
 			default: ''
 		},
-		// 会话内消息卡片标题，open-type="contact"时有效
-		// 默认当前标题，只微信小程序有效
 		sendMessageTitle: {
 			type: String,
 			default: ''
 		},
-		// 会话内消息卡片点击跳转小程序路径，open-type="contact"时有效
-		// 默认当前分享路径，只微信小程序有效
 		sendMessagePath: {
 			type: String,
 			default: ''
 		},
-		// 会话内消息卡片图片，open-type="contact"时有效
-		// 默认当前页面截图，只微信小程序有效
 		sendMessageImg: {
 			type: String,
 			default: ''
 		},
-		// 是否显示会话内消息卡片，设置此参数为 true，用户进入客服会话会在右下角显示"可能要发送的小程序"提示，
-		// 用户点击后可以快速发送小程序消息，open-type="contact"时有效
 		showMessageCard: {
 			type: Boolean,
 			default: false
@@ -174,7 +161,6 @@ export default {
 				return {};
 			}
 		},
-		// 额外传参参数，用于小程序的data-xxx属性，通过target.dataset.name获取
 		dataName: {
 			type: String,
 			default: ''
@@ -194,7 +180,6 @@ export default {
 			hoverClass = this.plain ? 'l-' + this.type + '-plain-hover' : 'l-' + this.type + '-hover';
 			return hoverClass;
 		},
-		// 在'primary', 'success', 'error', 'warning'类型下，不显示边框，否则会造成四角有毛刺现象
 		showHairLineBorder() {
 			if (['primary', 'success', 'error', 'warning'].indexOf(this.type) >= 0 && !this.plain) {
 				return '';
@@ -205,10 +190,10 @@ export default {
 	},
 	data() {
 		return {
-			rippleTop: 0, // 水波纹的起点Y坐标到按钮上边界的距离
-			rippleLeft: 0, // 水波纹起点X坐标到按钮左边界的距离
-			fields: {}, // 波纹按钮节点信息
-			waveActive: false // 激活水波纹
+			rippleTop: 0, 
+			rippleLeft: 0, 
+			fields: {}, 
+			waveActive: false 
 		};
 	},
 	methods: {
@@ -216,11 +201,9 @@ export default {
 		click(e) {
 			// 进行节流控制，每this.throttle毫秒内，只在开始处执行
 			this.$Lau.throttle(() => {
-				// 如果按钮时disabled和loading状态，不触发水波纹效果
 				if (this.loading === true || this.disabled === true) return;
 				// 是否开启水波纹效果
 				if (this.ripple) {
-					// 每次点击时，移除上一次的类，再次添加，才能触发动画效果
 					this.waveActive = false;
 					this.$nextTick(function() {
 						this.getWaveQuery(e);
@@ -232,12 +215,11 @@ export default {
 		// 查询按钮的节点信息
 		getWaveQuery(e) {
 			this.getElQuery().then(res => {
-				// 查询返回的是一个数组节点
+				
 				let data = res[0];
-				// 查询不到节点信息，不操作
+			
 				if (!data.width || !data.width) return;
-				// 水波纹的最终形态是一个正方形(通过border-radius让其变为一个圆形)，这里要保证正方形的边长等于按钮的最长边
-				// 最终的方形（变换后的圆形）才能覆盖整个按钮
+				
 				data.targetWidth = data.height > data.width ? data.height : data.width;
 				if (!data.targetWidth) return;
 				this.fields = data;
@@ -255,7 +237,6 @@ export default {
 				touchesX = e.touches[0].clientX;
 				touchesY = e.touches[0].clientY;
 				// #endif
-				// 获取触摸点相对于按钮上边和左边的x和y坐标，原理是通过屏幕的触摸点（touchesY），减去按钮的上边界data.top
 				this.rippleTop = touchesY - data.top - data.targetWidth / 2;
 				this.rippleLeft = touchesX - data.left - data.targetWidth / 2;
 				this.$nextTick(() => {
@@ -277,7 +258,7 @@ export default {
 				});
 			});
 		},
-		// 下面为对接uniapp官方按钮开放能力事件回调的对接
+		
 		getphonenumber(res) {
 			this.$emit('getphonenumber', res);
 		},
@@ -306,9 +287,7 @@ export default {
 .l-btn {
 	position: relative;
 	border: 0;
-	//border-radius: 10rpx;
 	display: inline-block;
-	// 避免边框某些场景可能被“裁剪”，不能设置为hidden
 	overflow: visible;
 	line-height: 1;
 	display: flex;
@@ -413,9 +392,7 @@ export default {
 	content: ' ';
 	position: absolute;
 	pointer-events: none;
-	// 设置为border-box，意味着下面的scale缩小为0.5，实际上缩小的是伪元素的内容（border-box意味着内容不含border）
 	box-sizing: border-box;
-	// 中心点作为变形(scale())的原点
 	-webkit-transform-origin: 0 0;
 	transform-origin: 0 0;
 	left: 0;

@@ -29,7 +29,6 @@
 					return {}
 				}
 			},
-			// 遮罩的动画样式， 是否使用使用zoom进行scale进行缩放
 			zoom: {
 				type: Boolean,
 				default: true
@@ -56,10 +55,8 @@
 		watch: {
 			show(n) {
 				if(n && this.zoom) {
-					// 当展示遮罩的时候，设置scale为1，达到缩小(原来为1.2)的效果
 					this.zoomStyle.transform = 'scale(1, 1)';
 				} else if(!n && this.zoom) {
-					// 当隐藏遮罩的时候，设置scale为1.2，达到放大(因为显示遮罩时已重置为1)的效果
 					this.zoomStyle.transform = this.scale;
 				}
 			}

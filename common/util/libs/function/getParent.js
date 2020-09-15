@@ -1,8 +1,5 @@
-// 获取父组件的参数，因为支付宝小程序不支持provide/inject的写法
-// this.$parent在非H5中，可以准确获取到父组件，但是在H5中，需要多次this.$parent.$parent.xxx
 export default function getParent(name, keys) {
 	let parent = this.$parent;
-	// 通过while历遍，这里主要是为了H5需要多层解析的问题
 	while (parent) {
 		// 父组件
 		if (parent.$options.name !== name) {
@@ -18,8 +15,6 @@ export default function getParent(name, keys) {
 			} else {
 				// 历遍传过来的对象参数
 				for(let i in keys) {
-					// 如果子组件有此值则用，无此值则用父组件的值
-					// 判断是否空数组，如果是，则用父组件的值，否则用子组件的值
 					if(Array.isArray(keys[i])) {
 						if(keys[i].length) {
 							data[i] = keys[i];

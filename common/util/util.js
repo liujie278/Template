@@ -3,7 +3,6 @@
  * nvue页面需单独引入该文件
  */
 
-import http from './libs/request/index.js'
 import {isAccessExpired,isRefreshExpired,removeTokenInfo,updateTokenInfo,Delete} from './libs/request/token.js'
 // 版本信息
 import config from './libs/config/config.js'
@@ -23,9 +22,6 @@ import $parent from './libs/function/$parent.js'
 import route from './libs/function/route.js'
 
 
-
-
-
 module.exports = {
 	showWaiting,
 	closeWaiting,
@@ -36,10 +32,6 @@ module.exports = {
 	zIndex,
 	addUnit,
 	test,
-	get: http.get,
-	post: http.post,
-	put: http.put,
-	http,
 	isAccessExpired,
 	isRefreshExpired,
 	removeTokenInfo,
